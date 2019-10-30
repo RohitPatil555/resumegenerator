@@ -1,4 +1,4 @@
-# resumegenerator
+# Resume Generator
 This help you to generate resume from markdown to html.
 And then you can use browser to save page as pdf to share across other via mail.
 It will save a lot of time in formating resume whenever you try to add material or remove from resume.
