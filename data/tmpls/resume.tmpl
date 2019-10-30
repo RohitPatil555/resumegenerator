@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="{{ data.stylesheet }}">
+    <title></title>
+  </head>
+  <body>
+    <div class="header">
+      {{ data.header }}
+    </div>
+    <div class="summary">
+      {{ data.summary }}
+    </div>
+    <div class="skills">
+      {{ data.skills }}
+    </div>
+    <h3 class="exptitle"> Experience: </h3>
+    {% for exp in data.experiences %}
+    <div class="experience">
+      {{ exp }}
+    </div>
+    {% endfor %}
+    <div class="education">
+      {{ data.education }}
+    </div>
+    <div class="footer">
+      {{ data.footer }}
+    </div>
+  </body>
+</html>

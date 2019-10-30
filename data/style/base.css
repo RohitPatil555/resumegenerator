@@ -1,0 +1,152 @@
+.body {
+  width: 210mm
+}
+
+.header {
+  display: grid;
+  grid-area: header;
+  grid-template-columns: 65% auto;
+  grid-template-rows: auto;
+  grid-template-areas:
+    "title contact"
+    ;
+  border-bottom: 1mm solid black;
+}
+
+.header > h1 {
+  grid-area: title;
+}
+
+.header > p {
+  grid-area: contact;
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: 10% auto;
+  grid-template-rows: auto auto;
+  grid-gap: 2mm;
+}
+
+.summary > h3 {
+  grid-row: 1/ span 2;
+}
+
+.summary > p {
+  grid-column: 2/ span 3;
+  grid-row: 2 / span 3;
+}
+
+.skills {
+  display: grid;
+  grid-template-columns: 10% auto;
+  grid-template-rows: auto auto;
+  grid-gap: 2mm;
+}
+
+.skills > h3 {
+  grid-row: 1/ span 2;
+  margin-bottom: 8mm;
+}
+
+.skills > table {
+  grid-column: 2/ span 3;
+  grid-row: 2 / span 3;
+  width: auto;
+  display: table;
+}
+
+.skills > table thead {
+    display: none;
+}
+
+.skills > table td {
+  border-bottom: 0.5mm solid gray;
+}
+
+.exptitle {
+
+}
+
+.experience {
+  display: grid;
+  width: auto;
+  grid-gap: 2mm;
+  grid-template-columns: 10% 2% auto auto;
+  grid-template-rows: auto auto auto auto;
+  border-bottom: 1mm dashed gray;
+}
+
+.experience > h4 {
+  text-align: left;
+  grid-column: 2/ span 5;
+  grid-row: 1/span 2;
+}
+
+.experience > h5 {
+  text-align: right;
+  grid-column: 4/ span 5;
+  grid-row: 2/span 3;
+}
+
+.experience > h6 {
+  text-align: left;
+  grid-column: 2/ span 3;
+  grid-row: 2/span 4;
+}
+
+.experience > p {
+  grid-column: 3/ span 4;
+  grid-row: 3/span 4;
+}
+.experience > ul {
+  margin-top: 8mm;
+  grid-column: 3/ span 4;
+  grid-row: 4/span 5;
+}
+
+.education {
+  width: auto;
+  display: grid;
+  grid-template-columns: 8% auto;
+  grid-template-rows: auto auto;
+  grid-gap: 2mm;
+}
+
+.education > h1 {
+  grid-column: 1/ span 3;
+  grid-row: 1/span 2;
+}
+
+.education > ul {
+  margin-top: 2mm;
+  grid-column: 2/ span 3;
+  grid-row: 2/span 3;
+}
+
+.footer {
+  display: grid;
+  grid-template-columns: 10% auto;
+  grid-template-rows: auto auto auto auto;
+  grid-gap: 2mm;
+  border-top: 1mm solid black;
+}
+
+.footer > p {
+  grid-column: 2/ span 3;
+  grid-row: 1/span 2;
+}
+
+.footer > h6 {
+  margin-top: 8mm;
+  text-align: right;
+  grid-column: 2/ span 3;
+  grid-row: 2/span 3;
+}
+
+.footer > h5 {
+  margin-top: 5mm;
+  text-align: right;
+  grid-column: 2/ span 3;
+  grid-row: 4/span 5;
+}

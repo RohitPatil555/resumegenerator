@@ -1,0 +1,167 @@
+#!/usr/bin/python3
+
+import re
+import markdown
+import json
+import argparse
+import os
+import sys
+from jinja2 import Environment, FileSystemLoader
+
+class resume:
+    def __init__(self, jsonfile, outfile):
+        self.data = {}
+        self.data["stylesheet"] = ""
+        self.data["header"] = ""
+        self.data["footer"] = ""
+        self.data["summary"] = ""
+        self.data["skills"] = ""
+        self.data["education"] = ""
+        self.data["experiences"] = []
+        self.tmplfile = ""
+        self.jsdata = None
+        self.basepath = ""
+        self.outfile = outfile
+
+        if not os.path.isfile(jsonfile):
+            print("%s : not found"%(jsonfile))
+            sys.exit(2)
+
+        self.basepath = os.path.dirname(os.path.abspath(jsonfile))
+
+        with open(jsonfile, 'r') as fr:
+            self.jsdata = json.load(fr)
+            if self.jsdata == None:
+                sys.exit(1)
+
+        self.md = markdown.Markdown(extensions=['attr_list','tables','nl2br'])
+        self.options= [ 'header', 'footer', 'skills', 'summary', 'education']
+
+    def __str__(self):
+        print(self.data)
+        print(self.jsdata)
+        return " "
+
+    def _verifyFileExists(self, file, folder):
+        rfile = os.path.join(folder,file)
+        rfile = os.path.join(self.basepath, rfile)
+
+        if not os.path.isfile(rfile):
+            return False
+
+        return True
+
+    def _verifyMDFileExists(self, file):
+        return self._verifyFileExists(file, self.jsdata["folder"])
+
+    def _verifyStyleFileExists(self, file):
+        return self._verifyFileExists(file, "")
+
+    def _verifyTemplateFileExists(self, file):
+        return self._verifyFileExists(file, "")
+
+    def verifyInfo(self):
+        if 'stylesheet' in self.jsdata:
+            if not self._verifyStyleFileExists(self.jsdata['stylesheet']):
+                return 'stylesheet'
+
+        if 'templatefile' in self.jsdata:
+            if not self._verifyStyleFileExists(self.jsdata['templatefile']):
+                return 'templatefile'
+
+        for opt in self.options:
+            if opt in self.jsdata:
+                if not self._verifyMDFileExists(self.jsdata[opt]):
+                    return opt
+
+        if 'experiences' in self.jsdata:
+            for expt in self.jsdata["experiences"]:
+                if not self._verifyMDFileExists(self.jsdata[opt]):
+                    return 'experiences-%s'%(expt)
+
+        return 'none'
+
+    def _gethtmldata(self, file):
+        htmldata = ""
+        rfile = os.path.join(self.jsdata["folder"],file)
+        rfile = os.path.join(self.basepath, rfile)
+
+        with open(rfile) as fd:
+            htmldata = self.md.convert(fd.read())
+
+        htmldata = re.sub(r"</p>(\n)*<p>", "<br><br>", htmldata)
+        return htmldata
+
+    def _updatestylesheet(self):
+        rfile = os.path.join( self.basepath, self.jsdata["stylesheet"])
+        self.data["stylesheet"] = rfile
+
+    def _updateheader(self):
+        if 'header' in self.jsdata:
+            self.data["header"] = self._gethtmldata(self.jsdata["header"])
+
+    def _updatesummary(self):
+        if 'summary' in self.jsdata:
+            self.data["summary"] = self._gethtmldata(self.jsdata["summary"])
+
+    def _updateskills(self):
+        if 'skills' in self.jsdata:
+            self.data["skills"] = self._gethtmldata(self.jsdata["skills"])
+
+    def _updateexperences(self):
+        if 'experiences' in self.jsdata:
+            for expfile in self.jsdata["experiences"]:
+                self.data["experiences"].append(self._gethtmldata(expfile))
+
+    def _updateeducation(self):
+        if 'education' in self.jsdata:
+            self.data["education"] = self._gethtmldata(self.jsdata["education"])
+
+    def _updatefooter(self):
+        if 'footer' in self.jsdata:
+            self.data["footer"] = self._gethtmldata(self.jsdata["footer"])
+
+    def updateInfo(self):
+        self._updatestylesheet()
+        self._updateheader()
+        self._updatesummary()
+        self._updateskills()
+        self._updateexperences()
+        self._updateeducation()
+        self._updatefooter()
+
+    def getInfo(self):
+        return self.data;
+
+    def convertTemplate(self):
+        rfile = os.path.join(self.basepath, self.jsdata["templatefile"])
+        this_dir = os.path.dirname(rfile)
+        ofile = os.path.join(self.basepath, self.outfile)
+        j2env = Environment(loader=FileSystemLoader(this_dir), trim_blocks=True)
+        tl = j2env.get_template(os.path.basename(rfile))
+        tl.stream(data=self.data).dump(ofile)
+
+parser = argparse.ArgumentParser(description="Generate Resume Utility")
+parser.add_argument('-c', '--config',help='please provide config file',required=True)
+parser.add_argument('-o', '--output',help='please provide output file path',required=True)
+
+args = parser.parse_args()
+
+print(args.config)
+
+rdata = resume(args.config, args.output)
+
+retval = rdata.verifyInfo()
+if retval != 'none':
+    print("File not found for %s"%(retval))
+    sys.exit(1)
+
+print(rdata)
+
+rdata.updateInfo()
+
+print(rdata)
+
+rdata.convertTemplate()
+
+print("done !!!")

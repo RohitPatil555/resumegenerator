@@ -1,0 +1,14 @@
+{
+  "folder":"resume",
+  "stylesheet" : "style/base.css",
+  "templatefile" : "tmpls/resume.tmpl",
+  "header" : "test0.md",
+  "footer" : "test10.md",
+  "summary": "test1.md",
+  "skills" : "test2.md",
+  "education" : "test4.md",
+  "experiences": [
+    "test3_0.md",
+    "test3_1.md"
+  ]
+}
