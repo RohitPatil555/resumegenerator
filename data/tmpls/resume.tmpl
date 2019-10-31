@@ -2,8 +2,8 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="{{ data.stylesheet }}">
-    <title></title>
+    <link rel="stylesheet" href="{{ data.stylesheet }}"/>
+    <title>{{ data.title }} - Resume</title>
   </head>
   <body>
     <div class="header">
@@ -16,11 +16,13 @@
       {{ data.skills }}
     </div>
     <h3 class="exptitle"> Experience: </h3>
-    {% for exp in data.experiences %}
-    <div class="experience">
-      {{ exp }}
+    <div class="companies">
+      {% for exp in data.experiences %}
+      <div class="experience">
+        {{ exp }}
+      </div>
+      {% endfor %}
     </div>
-    {% endfor %}
     <div class="education">
       {{ data.education }}
     </div>

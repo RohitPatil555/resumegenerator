@@ -13,6 +13,7 @@ class resume:
         self.data = {}
         self.data["stylesheet"] = ""
         self.data["header"] = ""
+        self.data["title"] = ""
         self.data["footer"] = ""
         self.data["summary"] = ""
         self.data["skills"] = ""
@@ -99,6 +100,8 @@ class resume:
     def _updateheader(self):
         if 'header' in self.jsdata:
             self.data["header"] = self._gethtmldata(self.jsdata["header"])
+            self.data["title"] = re.search(r"<h1>(.*?)</h1>", self.data["header"]).group(1)
+            
 
     def _updatesummary(self):
         if 'summary' in self.jsdata:
